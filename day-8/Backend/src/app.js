@@ -1,9 +1,11 @@
 const express = require("express");
 const noteModel = require("./model/note.model");
+const cors = require("cors");
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 // POST method API
 
@@ -29,6 +31,35 @@ app.get("/api/notes",async (req, res)=>{
         message:"Notes Fetched Successfully.",
         notes
     })
+})
+
+// DELETE /api/notes/:id
+// DELETE method
+
+app.delete("/api/notes/:id",async (req, res)=>{
+  const id = req.params.id;
+
+  await noteModel.findByIdAndDelete(id)
+
+  res.status(200).json({
+    message:"Note deleted successfully."
+  })
+})
+
+// PATCH /api/notes/:id
+// PATCH method
+
+app.patch("/api/notes/:id",async (req, res)=>{
+  const id = req.params.id;
+
+  const {description} = req.body;
+
+  await noteModel.findByIdAndUpdate(id,{description})
+
+  res.status(200).json({
+    message:"Note Updated Successfully."
+  })
+
 })
 
 module.exports = app;
