@@ -1,11 +1,13 @@
 const express = require("express");
 const noteModel = require("./model/note.model");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(express.static("./public"));
 
 // POST method API
 
@@ -59,7 +61,14 @@ app.patch("/api/notes/:id",async (req, res)=>{
   res.status(200).json({
     message:"Note Updated Successfully."
   })
+})
 
+console.log(__dirname);
+
+
+// for wrong API request we send a index.html file in response (WildCard API)
+app.use("*name",(req,res)=>{
+  res.sendFile(path.join(__dirname,"..","/public/index.html"));
 })
 
 module.exports = app;
