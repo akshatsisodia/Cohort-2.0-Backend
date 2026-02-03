@@ -4,6 +4,9 @@ const connectToDb = require("./src/config/database");
 
 connectToDb();
 
-app.listen(3000, () => {
+// Dynamic PORT Assignment
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
   console.log("server is running on port 3000");
 });
