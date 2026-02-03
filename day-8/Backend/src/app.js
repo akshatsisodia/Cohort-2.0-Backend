@@ -63,8 +63,6 @@ app.patch("/api/notes/:id",async (req, res)=>{
   })
 })
 
-console.log(__dirname);
-
 
 // for wrong API request we send a index.html file in response (WildCard API)
 app.use("*name",(req,res)=>{

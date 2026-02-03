@@ -60,7 +60,6 @@ function App() {
       value={updateDesc}
       onChange={(e) => {
         setUpdateDesc(e.target.value);
-        console.log(e.target.value);
       }}
       />
     </div>
