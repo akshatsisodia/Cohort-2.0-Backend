@@ -8,7 +8,7 @@ function App() {
   function createNote(e){
     e.preventDefault();
     const {title, description} = e.target.elements;
-    axios.post("http://localhost:3000/api/notes",{
+    axios.post("/api/notes",{
       title:title.value,
       description:description.value,
     }).then((res)=>{
@@ -18,19 +18,19 @@ function App() {
   }
 
   function fetchNotes() {
-    axios.get("http://localhost:3000/api/notes").then((res) => {
+    axios.get("/api/notes").then((res) => {
       setNotes(res.data.notes);
     });
   }
 
   function deleteNote(id){
-    axios.delete(`http://localhost:3000/api/notes/${id}`).then((res)=>{
+    axios.delete(`/api/notes/${id}`).then((res)=>{
       fetchNotes();
     })
   }
 
   function updateNote(id){
-    axios.patch(`http://localhost:3000/api/notes/${id}`,{
+    axios.patch(`/api/notes/${id}`,{
       description:updateDesc,
     }).then((res)=>{
       fetchNotes();
@@ -39,6 +39,7 @@ function App() {
     setUpdateDesc("");
 
   }
+  
 
   useEffect(() => {
     fetchNotes();
