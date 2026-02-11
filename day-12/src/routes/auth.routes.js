@@ -70,12 +70,9 @@ authRouter.post("/login",async (req, res)=>{
 authRouter.get("/get-me",async (req, res)=>{
     const token = req.cookies.accessToken;
 
-    const decode = jwt.verify(token,process.env.JWT_SECRET);
+    const {id} = jwt.verify(token,process.env.JWT_SECRET);
 
-    console.log(decode);
-    
-
-    const user = await userModel.findById(decode.id)
+    const user = await userModel.findById(id)
 
     res.json({
         user:{
