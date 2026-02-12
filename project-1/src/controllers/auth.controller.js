@@ -2,7 +2,7 @@ const userModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-async function userRegisterApi(req, res){
+async function userRegisterController(req, res){
     const {username, email, password, bio, profile_pic} = req.body;
 
     const isUserExists = await userModel.findOne({
@@ -47,7 +47,7 @@ async function userRegisterApi(req, res){
 
 }
 
-async function userLoginApi(req, res){
+async function userLoginController(req, res){
     const {username, email, password} = req.body;
 
     const user = await userModel.findOne({
@@ -91,6 +91,6 @@ async function userLoginApi(req, res){
 }
 
 module.exports = {
-    userRegisterApi,
-    userLoginApi
+    userRegisterController,
+    userLoginController
 }
