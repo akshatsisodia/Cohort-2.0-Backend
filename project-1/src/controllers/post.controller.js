@@ -84,9 +84,54 @@ async function gettingUserPostsController(req, res) {
 }
 
 
+async function getPostDetailsController(req, res){
+    const token = req.cookies.token;
+
+    if(!token){
+        return res.status(401).json({
+            message:"token is Required."
+        })
+    }
+
+    let decoded;
+
+    try{
+        decoded = jwt.verify(token,process.env.JWT_SECRET)
+    }catch(err){
+        return res.status(401).json({
+            message:"Token is Invalid."
+        })
+    }
+
+    const userId = decoded.user;
+    const postId = req.params.postId;
+
+    const post = await postModel.findById(postId);
+
+    if(!post){
+        return res.status(404).json({
+            message:"Post not Found."
+        })
+    }
+
+    const isUserValid = post.user.toString() === userId;
+
+    if(!isUserValid){
+        return res.status(403).json({
+            message:"Forbidden Content."
+        })
+    }
+    
+    res.status(200).json({
+        message:"post fetched Successfully.",
+        post
+    })
+
+}
 
 
 module.exports = {
     createPostController,
-    gettingUserPostsController
+    gettingUserPostsController,
+    getPostDetailsController
 }
