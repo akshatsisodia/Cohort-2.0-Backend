@@ -8,25 +8,6 @@ const imageKit = ImageKit({
 });
 
 async function createPostController(req, res){
-
-    const token = req.cookies.token;
-
-    if(!token){
-        return res.status(401).json({
-            message:"token is required, Unautharized Request"
-        })
-    }
-
-    let decode = null;
-    
-    try{
-         decode = jwt.verify(token,process.env.JWT_SECRET)
-    }
-    catch(err){
-        return res.status(401).json({
-            message:"user is not autharized"
-        })
-    }
     
     const file = await imageKit.files.upload({
         file:await toFile(Buffer.from(req.file.buffer),"file"),
@@ -37,7 +18,7 @@ async function createPostController(req, res){
     const post = await postModel.create({
         caption:req.body.caption,
         imageUrl:file.url,
-        user:decode.user
+        user:req.user.id
     })
 
     res.status(201).json({
@@ -49,28 +30,9 @@ async function createPostController(req, res){
 
 
 async function gettingUserPostsController(req, res) {
-    const token = req.cookies.token;
+   
 
-    if(!token){
-        return res.status(401).json({
-            message:"request is not Autharised."
-        })
-    }
-
-    let decoded;
-
-    try{
-        decoded = jwt.verify(token,process.env.JWT_SECRET)
-    }catch(err){
-        return res.status(401).json({
-            message:"Token Invalid"
-        })
-    }
-
-    const userId = decoded.user;
-
-    console.log(userId);
-    
+    const userId = req.user.id;
 
     const posts = await postModel.find({
         user:userId
@@ -85,25 +47,8 @@ async function gettingUserPostsController(req, res) {
 
 
 async function getPostDetailsController(req, res){
-    const token = req.cookies.token;
-
-    if(!token){
-        return res.status(401).json({
-            message:"token is Required."
-        })
-    }
-
-    let decoded;
-
-    try{
-        decoded = jwt.verify(token,process.env.JWT_SECRET)
-    }catch(err){
-        return res.status(401).json({
-            message:"Token is Invalid."
-        })
-    }
-
-    const userId = decoded.user;
+   
+    const userId = req.user.id;
     const postId = req.params.postId;
 
     const post = await postModel.findById(postId);
