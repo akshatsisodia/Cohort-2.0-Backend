@@ -49,6 +49,7 @@ async function gettingUserPostsController(req, res) {
 async function getPostDetailsController(req, res){
    
     const userId = req.user.id;
+    
     const postId = req.params.postId;
 
     const post = await postModel.findById(postId);

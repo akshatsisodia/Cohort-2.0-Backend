@@ -24,5 +24,4 @@ const token = req.cookies.token;
   next();
 }
 
-
 module.exports = identifyUser;
