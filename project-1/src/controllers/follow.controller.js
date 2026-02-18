@@ -59,11 +59,24 @@ async function unfollowUserController(req, res){
     
 }
 
+async function updateFollowStatus(req, res){
+    const followRequest = req.params.requestId;
+    const {action} = req.body;
 
+    const userRequest = await followModel.findByIdAndUpdate(followRequest,{
+        status:action === "accept" ? "accecpted":"rejected"
+    },{new:true})
 
+    res.status(200).json({
+        message:`user ${userRequest.status} your request`,
+        userRequest
+    })
+    
+}
 
 
 module.exports = {
     followUserController,
-    unfollowUserController
+    unfollowUserController,
+    updateFollowStatus
 }

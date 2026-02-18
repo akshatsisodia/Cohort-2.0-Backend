@@ -8,5 +8,7 @@ followRouter.post("/follow/:username",identifyUser,followController.followUserCo
 
 followRouter.delete("/unfollow/:username",identifyUser, followController.unfollowUserController)
 
+followRouter.patch("/follow/:requestId",identifyUser,followController.updateFollowStatus)
+
 
 module.exports = followRouter;
