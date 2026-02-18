@@ -4,9 +4,9 @@ const followController = require("../controllers/follow.controller");
 const identifyUser = require("../middleware/auth.middleware");
 
 
-followRouter.post("/follow/:id",identifyUser,followController.userFollowController)
+followRouter.post("/follow/:username",identifyUser,followController.followUserController)
 
-followRouter.delete("/unfollow/:id",identifyUser, followController.userUnfollowController)
+followRouter.delete("/unfollow/:username",identifyUser, followController.unfollowUserController)
 
 
 module.exports = followRouter;
