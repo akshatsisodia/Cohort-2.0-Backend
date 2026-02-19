@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const followModel = require("../models/follow.model");
 const userModel = require("../models/user.model");
 
@@ -61,7 +62,43 @@ async function unfollowUserController(req, res){
 
 async function updateFollowStatus(req, res){
     const followRequest = req.params.requestId;
+    const followeeUsername = req.user.username;
     const {action} = req.body;
+
+    if(!mongoose.Types.ObjectId.isValid(followRequest)){
+        return res.status(400).json({
+            message:"Invalid Request"
+        })
+    }
+
+    const requestData = await followModel.findById(followRequest)
+
+    if(!requestData){
+        return res.status(404).json({
+            message:"Invalid Request"
+        })
+    }
+
+    if(requestData.followee !==  followeeUsername){
+        return res.status(403).json({
+            message:"you are not autharized for this request"
+        })
+    }
+
+    if(requestData.status !== "pending"){
+        return res.status(409).json({
+            message:"Request already processed",
+            requestData
+        })
+    }
+
+    const allowed = ["accept","reject"];
+
+    if(!allowed.includes(action)){
+        return res.status(400).json({
+            message:"Invalid Status"
+        })
+    }
 
     const userRequest = await followModel.findByIdAndUpdate(followRequest,{
         status:action === "accept" ? "accecpted":"rejected"
