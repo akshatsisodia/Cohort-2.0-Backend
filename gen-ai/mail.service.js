@@ -27,7 +27,7 @@ export const sendEmail = async ({to, subject, html, text=""}) =>{
     }
 
     const details = await tranporter.sendMail(mailOptions);
-    console.log("Email sent", details);
+    // console.log("Email sent", details);
 
     return "Email sent Successfully.";
 }

@@ -2,8 +2,12 @@ import "dotenv/config";
 import readline from "readline/promises";
 import { ChatMistralAI } from "@langchain/mistralai";
 import { HumanMessage, tool, createAgent } from "langchain";
-import { sendEmail } from "./mail.service";
+import { sendEmail } from "./mail.service.js";
 import * as z from "zod";
+
+const model = new ChatMistralAI({
+  model: "mistral-small-latest",
+});
 
 const emailTool = tool(
   sendEmail,
@@ -28,10 +32,6 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-const model = new ChatMistralAI({
-  model: "mistral-small-latest",
-});
-
 const COLORS = {
   reset: "\x1b[0m",
   user: "\x1b[36m",
@@ -39,23 +39,21 @@ const COLORS = {
   label: "\x1b[1m",
 };
 
-const message = [];
+const messages = [];
 
 while (true) {
   const prompt = `${COLORS.user}${COLORS.label}You:${COLORS.reset} `;
   const userInput = await rl.question(prompt);
 
-  message.push(new HumanMessage(userInput));
+  messages.push(new HumanMessage(userInput));
 
   // Invoke the model
-  const response = await agent.invoke({message});
+  const response = await agent.invoke({messages});
 
-  message.push(response.messages[response.messages.length-1]);
+  messages.push(response.messages[response.messages.length-1]);
 
   // Print AI response styled as `AI:`
-  // const aiText = response?.content ?? String(response);
-  // console.log(`${COLORS.ai}${COLORS.label}AI:${COLORS.reset} ${aiText}`);
-
-  console.log(response);
+  const aiText = response?.content ?? String(response.messages[response.messages.length-1].content);
+  console.log(`${COLORS.ai}${COLORS.label}AI:${COLORS.reset} ${aiText}`);
 }
 
