@@ -27,7 +27,13 @@ const splitter = new RecursiveCharacterTextSplitter({
 
 const chunks = await splitter.splitText(data.text);
 
-const docs = await embeddings.embedDocuments(chunks);
+const docs = await Promise.all(chunks.map(async (chunk)=>{
+    const embedding = await embeddings.embedQuery(chunk);
+    return {
+        text:chunk,
+        embedding
+    }
+}));
 
 console.log(docs);
 
