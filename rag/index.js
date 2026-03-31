@@ -18,13 +18,13 @@ const pc = new Pinecone({
 
 const index = pc.index("cohort-2");
 
-let dataBuffer = fs.readFileSync("./story.pdf");
+// let dataBuffer = fs.readFileSync("./story.pdf");
 
-const parser = new PDFParse({
-    data:dataBuffer
-});
+// const parser = new PDFParse({
+//     data:dataBuffer
+// });
 
-const data = await parser.getText()
+// const data = await parser.getText()
 
 
 const splitter = new RecursiveCharacterTextSplitter({
@@ -51,5 +51,20 @@ const results = await index.upsert({
         }
     }))
 })
- console.log(results);
+
+
+const queryEmbedding = await embeddings.embedQuery("what is the experience of Arav's internship");
+
+// console.log(queryEmbedding);
+
+
+const response = await index.query({
+    vector: queryEmbedding,
+    topK:2,
+    includeMetadata: true
+})
+
+// console.log(JSON.stringify(response));
+
+
  
