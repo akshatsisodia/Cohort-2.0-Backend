@@ -18,13 +18,13 @@ const pc = new Pinecone({
 
 const index = pc.index("cohort-2");
 
-// let dataBuffer = fs.readFileSync("./story.pdf");
+let dataBuffer = fs.readFileSync("./story.pdf");
 
-// const parser = new PDFParse({
-//     data:dataBuffer
-// });
+const parser = new PDFParse({
+    data:dataBuffer
+});
 
-// const data = await parser.getText()
+const data = await parser.getText()
 
 
 const splitter = new RecursiveCharacterTextSplitter({
